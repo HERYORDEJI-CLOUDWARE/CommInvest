@@ -4,6 +4,7 @@ import { View, Text, Animated, StyleSheet, Dimensions, Button, ScrollView } from
 import Modal from 'react-native-modal';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { IndicatorContext } from '../context-api/indicator-context';
+import { useNavigation } from '@react-navigation/native';
 import {
   handleHideIndicator,
   handleHideKycIndicator,
@@ -15,10 +16,12 @@ const { width } = Dimensions.get('screen');
 
 export default function KycInform(props) {
   const { state: indicatorState, dispatch: indicatorDispatch } = useContext(IndicatorContext);
+  const { showKyc, kycMessage } = indicatorState;
+  const navigation = useNavigation();
 
   return (
     <Modal
-      isVisible={props.isVisible}
+      isVisible={Boolean(showKyc)}
       style={styles.container}
       onBackButtonPress={() => indicatorDispatch(handleHideKycIndicator())}
       onBackdropPress={() => indicatorDispatch(handleHideKycIndicator())}
@@ -31,7 +34,7 @@ export default function KycInform(props) {
         >
           <Text style={[styles.title, { color: '#C00000' }]}>Announcement!!!</Text>
           <Text style={styles.message} numberOfLines={4}>
-            You hereby advised to complete your KYC processing
+            {kycMessage}
           </Text>
         </ScrollView>
         <View style={styles.bottomWrapper}>
@@ -43,7 +46,10 @@ export default function KycInform(props) {
           />
           <ButtonPrimary
             title={'Accept'}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate('KYC');
+              indicatorDispatch(handleHideKycIndicator());
+            }}
             containerStyles={{ backgroundColor: 'transparent', marginHorizontal: RFValue(20) }}
             titleStyles={{ color: '#C00000' }}
           />
@@ -52,6 +58,16 @@ export default function KycInform(props) {
     </Modal>
   );
 }
+
+/*
+ <KycInform
+        isVisible={Boolean(!kyc_details?.kyc_status && showKyc)}
+        onAccept={() => {
+          navigation.navigate('KYC Form');
+          indicatorDispatch(handleHideKycIndicator());
+        }}
+      />
+*/
 
 const styles = StyleSheet.create({
   container: {

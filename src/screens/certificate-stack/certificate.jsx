@@ -17,29 +17,10 @@ import CertificateList from '../../components/certificate-list';
 import DrawerNavbar from '../../components/drawer-navbar';
 
 export default function Certificate() {
-  const viewCertificate = async () => {
-    try {
-      await FilePickerManager.showFilePicker(null, async response => {
-        // console.log('Response = ', response);
-
-        if (response.didCancel) {
-          // console.log('User cancelled file picker');
-        } else if (response.error) {
-          // console.log('FilePickerManager Error: ', response.error);
-        } else {
-          await FileViewer.open(response.path);
-        }
-      });
-    } catch (e) {
-      // error
-      console.log('Working', e);
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <DrawerNavbar title={'Certificate'} />
-      <CertificateList noDashboard={true} viewCertificate={true} onPress={viewCertificate} />
+      <CertificateList />
     </SafeAreaView>
   );
 }

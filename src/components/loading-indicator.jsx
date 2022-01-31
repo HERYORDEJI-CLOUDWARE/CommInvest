@@ -52,7 +52,7 @@ export default function LoadingIndicator(props) {
 
   const onClose = () => {
     // setCount(0);
-    axiosController.abort();
+    // axiosController.abort();
     indicatorDispatch(handleHideIndicator());
   };
 

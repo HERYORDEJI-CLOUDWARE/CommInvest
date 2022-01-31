@@ -41,7 +41,7 @@ export default function CertificateList(props) {
     );
   };
 
-  // console.log('certificate', data);
+  console.log('certificate', data[1]);
 
   return (
     <>

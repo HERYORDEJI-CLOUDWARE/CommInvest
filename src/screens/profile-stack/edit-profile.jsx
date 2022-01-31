@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
   TouchableOpacity,
+  Image,
   View,
+  Text,
 } from 'react-native';
 
 import FilePickerManager from 'react-native-file-picker';
@@ -30,7 +30,6 @@ import { editProfileRequest, fetchUserRequest } from '../../api/auth-services';
 import { handleLoadUser } from '../../context-api/root-context/handlers';
 
 export default function EditProfile() {
-  const [document, setDocument] = useState(null);
   const navigation = useNavigation();
 
   const { state: indicatorState, dispatch: indicatorDispatch } = useContext(IndicatorContext);
@@ -38,6 +37,7 @@ export default function EditProfile() {
   const {
     user_details: { user_firstname, user_lastname, user_email, user_phone, user_avatar, user_id },
   } = rootState;
+  const [document, setDocument] = useState({ uri: user_avatar });
 
   const {
     control,
@@ -90,16 +90,20 @@ export default function EditProfile() {
       first_name: getValues('user_firstname'),
       last_name: getValues('user_lastname'),
       phone: getValues('user_phone'),
-      avatar: Boolean(document?.path) ? document : null,
-    }).then(res => {
-      const { status, message } = res;
-      if (Boolean(status)) {
-        indicatorDispatch(handleSuccessIndicator({ message }));
-        fetchUser();
-      } else {
-        indicatorDispatch(handleErrorIndicator({ message }));
-      }
-    });
+      avatar: Boolean(document?.uri) ? document : null,
+    })
+      .then(res => {
+        const { status, message, data } = res;
+        if (Boolean(status)) {
+          indicatorDispatch(handleSuccessIndicator({ message }));
+          fetchUser();
+        } else {
+          indicatorDispatch(
+            handleErrorIndicator({ message: `Try again\n\n${Object.values(data).join('\n\n')} ` }),
+          );
+        }
+      })
+      .catch(err => {});
   };
 
   return (
@@ -182,7 +186,12 @@ export default function EditProfile() {
           name={'user_phone'}
         />
         <TouchableOpacity onPress={selectDocument}>
-          <InputText label={'Select Document'} editable={false} value={document?.fileName} />
+          <Text style={styles.label}>Change Picture</Text>
+          {document?.uri && (
+            <View style={styles.imageWrapper}>
+              <Image source={{ uri: document.uri }} style={styles.image} />
+            </View>
+          )}
         </TouchableOpacity>
       </ScrollView>
       <ButtonPrimary
@@ -197,4 +206,24 @@ export default function EditProfile() {
 const styles = StyleSheet.create({
   container: { backgroundColor: '#FFFFFF', flex: 1 },
   content: { padding: RFValue(20) },
+  imageWrapper: {
+    height: RFValue(100, 668),
+    width: RFValue(100, 668),
+    borderRadius: RFValue(100, 668),
+    borderWidth: 4,
+    borderColor: '#FBE4E4',
+    overflow: 'hidden',
+  },
+  image: {
+    height: null,
+    width: null,
+    flex: 1,
+  },
+  label: {
+    color: '#555555',
+    fontFamily: 'Poppins-Medium',
+    fontSize: RFValue(12),
+    // paddingVertical: RFValue(0),
+    paddingHorizontal: RFValue(10),
+  },
 });

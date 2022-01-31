@@ -41,12 +41,6 @@ export default function Profile() {
   } = rootState;
   const { showKyc } = indicatorState;
 
-  useEffect(() => {
-    if (!kyc_status) {
-      indicatorDispatch(handleShowKycIndicator());
-    }
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <DrawerNavbar title={'Profile'} />
@@ -68,12 +62,9 @@ export default function Profile() {
           {/*<InputText label={'Gender'} editable={false} value={'Male'} />*/}
           <InputText label={'Email'} editable={false} value={user_email} />
           <InputText label={'Joined'} editable={false} value={create_date} />
-          {!kyc_status && (
-            <ButtonText
-              title={'Submit KYC Form ⇉'}
-              onPress={() => navigation.navigate('KYC Form')}
-            />
-          )}
+          {/* {!kyc_status && (
+            <ButtonText title={'Submit KYC Form ⇉'} onPress={() => navigation.navigate('KYC')} />
+          )} */}
           <ButtonText
             title={'Change Password ⇉'}
             onPress={() => navigation.navigate('Change Password')}
@@ -86,13 +77,7 @@ export default function Profile() {
       >
         <MaterialCommunityIcons name={'account-edit-outline'} style={styles.iconAdd} />
       </TouchableOpacity>
-      <KycInform
-        isVisible={!kyc_status && showKyc}
-        onAccept={() => {
-          navigation.navigate('KYC Form');
-          indicatorDispatch(handleHideKycIndicator());
-        }}
-      />
+      <KycInform />
     </SafeAreaView>
   );
 }

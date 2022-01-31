@@ -17,8 +17,27 @@ export default function CertificateItem({
 }) {
   const navigation = useNavigation();
 
+  const viewCertificate = async () => {
+    try {
+      await FilePickerManager.showFilePicker(null, async response => {
+        // console.log('Response = ', response);
+
+        if (response.didCancel) {
+          // console.log('User cancelled file picker');
+        } else if (response.error) {
+          // console.log('FilePickerManager Error: ', response.error);
+        } else {
+          await FileViewer.open(response.path);
+        }
+      });
+    } catch (e) {
+      // error
+      console.log('Working', e);
+    }
+  };
+
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.container}>
+    <TouchableOpacity onPress={viewCertificate} style={styles.container}>
       <View style={styles.row}>
         {/*<Text style={styles.key}>*/}
         {/*  Units:{'\t'}*/}

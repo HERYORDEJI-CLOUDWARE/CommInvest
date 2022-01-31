@@ -5,6 +5,11 @@ export const handleLoadUser = payload => ({
   payload,
 });
 
+export const handleLoadKyc = payload => ({
+  type: rootActionTypes.LoadKyc,
+  payload,
+});
+
 export const handleClearRoot = () => ({
   type: rootActionTypes.ClearAll,
 });

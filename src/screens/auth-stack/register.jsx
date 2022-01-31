@@ -74,7 +74,11 @@ export default function Register() {
           reset();
           navigation.goBack();
         } else {
-          indicatorDispatch(handleErrorIndicator({ message }));
+          indicatorDispatch(
+            handleErrorIndicator({
+              message: `Try again\n\n${Object.values(data).join('\n\n')} `,
+            }),
+          );
         }
       })
       .catch(err => {});
@@ -200,6 +204,34 @@ export default function Register() {
               />
             )}
             name={'phone'}
+          />
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: 'BVN is required!',
+                minLength: 11,
+                maxLength: 11,
+              },
+              // pattern: {
+              //   value: /^[+-]?\d*(?:[.,]\d*)?$/,
+              //   message: 'Not a valid phone number',
+              // },
+            }}
+            render={({ field }) => (
+              <InputText
+                {...field}
+                label={'Bank Verification Number'}
+                type={'bvn'}
+                keyboardType={'phone-pad'}
+                error={errors?.bvn?.message}
+                onChangeText={field.onChange}
+                value={field.value}
+                containerStyle={{ marginBottom: RFValue(10) }}
+              />
+            )}
+            name={'bvn'}
           />
           <Controller
             control={control}

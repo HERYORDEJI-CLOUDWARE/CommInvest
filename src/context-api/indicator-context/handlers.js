@@ -23,6 +23,7 @@ export const handleHideKycIndicator = () => ({
   type: indicatorActionTypes.HideKyc,
 });
 
-export const handleShowKycIndicator = () => ({
+export const handleShowKycIndicator = payload => ({
   type: indicatorActionTypes.ShowKyc,
+  payload,
 });

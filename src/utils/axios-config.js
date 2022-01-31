@@ -15,10 +15,10 @@ function onDownloadProgress(ev) {
 }
 
 export const setAxiosToken = ({ token }) => {
-  if (token) {
-    return (axios.defaults.headers.common['Authorization'] = `Bearer ${token}`);
-  }
-  delete axios.defaults.headers.common['Authorization'];
+  // if (token) {
+  //   return (axios.defaults.headers.common['Authorization'] = `Bearer ${token}`);
+  // }
+  // delete axios.defaults.headers.common['Authorization'];
 };
 
 export const axiosInstance = axios.create({
@@ -27,7 +27,7 @@ export const axiosInstance = axios.create({
   headers: {
     Authorization: `Bearer ${API_TOKEN}`,
   },
-  // signal: axiosController.signal,
+  signal: axiosController.signal,
 });
 
 axios.interceptors.request.use(config => ({

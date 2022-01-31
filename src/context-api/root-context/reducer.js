@@ -2,12 +2,16 @@ import { rootActionTypes } from './action-types';
 
 export const rootInitialState = {
   user_details: null,
+  kyc_details: null,
 };
 
 export const rootReducer = (state = rootInitialState, { type, payload }) => {
   switch (type) {
     case rootActionTypes.LoadUser:
       return { ...state, user_details: { ...payload } };
+
+    case rootActionTypes.LoadKyc:
+      return { ...state, kyc_details: { ...payload } };
 
     // case rootActionTypes.ClearAll:
     //   return Object.assign(rootInitialState, state);

@@ -70,7 +70,19 @@ export default function Login() {
 
   useEffect(() => {
     // onSubmit();
-    rootDispatch(handleClearRoot());
+    // rootDispatch(handleClearRoot());
+    fetchUserRequest({ user_id: 2 })
+      .then(res => {
+        const { status, message, data } = res;
+        if (Boolean(status)) {
+          reset();
+          rootDispatch(handleLoadUser({ ...data }));
+          indicatorDispatch(handleHideIndicator({ message }));
+        } else {
+          indicatorDispatch(handleErrorIndicator({ message }));
+        }
+      })
+      .catch(err => {});
   }, []);
 
   return (
@@ -160,7 +172,8 @@ export default function Login() {
             // onPress={() =>
             //   indicatorDispatch(handleSuccessIndicator({ message: 'Payment Loading' }))
             // }
-            onPress={handleSubmit(onSubmit)}
+            onPress={onSubmit}
+            // onPress={handleSubmit(onSubmit)}
             title={'Login'}
           />
           <View style={{ alignItems: 'center', marginVertical: RFValue(20) }}>

@@ -15,12 +15,15 @@ import RecentInvestmentList from '../../components/recent-investment-list';
 import KycInform from '../../components/kyc-inform';
 import { RootContext } from '../../context-api/root-context';
 import {
+  handleHideIndicator,
   handleHideKycIndicator,
   handleShowKycIndicator,
 } from '../../context-api/indicator-context/handlers';
+import { handleLoadKyc } from '../../context-api/root-context/handlers';
 import { useNavigation } from '@react-navigation/native';
 import { IndicatorContext } from '../../context-api/indicator-context';
 import DashboardView from '../../components/dashboard-view';
+import { fetchKycRequest } from '../../api/auth-services';
 
 export default function Dashboard() {
   const navigation = useNavigation();
@@ -28,16 +31,29 @@ export default function Dashboard() {
   const { state: indicatorState, dispatch: indicatorDispatch } = useContext(IndicatorContext);
   const { state: rootState, dispatch: rootDispatch } = useContext(RootContext);
   const {
-    user_details: { kyc_status },
+    user_details: { user_id },
+    kyc_details,
   } = rootState;
   const { showKyc } = indicatorState;
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (!kyc_status) {
-        indicatorDispatch(handleShowKycIndicator());
+  console.log('indicatorState', indicatorState);
+
+  const fetchKyc = () => {
+    fetchKycRequest({ user_id }).then(res => {
+      const { status, message, data } = res;
+      if (!data) {
+        //Boolean(Object.keys(data).length) == false
+        rootDispatch(handleLoadKyc({ message: message }));
+        indicatorDispatch(handleShowKycIndicator({ message }));
+      } else {
+        rootDispatch(handleLoadKyc({ message: message }));
+        indicatorDispatch(handleHideKycIndicator({ message }));
       }
-    }, 1234);
+    });
+  };
+
+  useEffect(() => {
+    fetchKyc();
   }, []);
 
   return (
@@ -45,13 +61,7 @@ export default function Dashboard() {
       <DrawerNavbar title={'Dashboard'} />
       <DashboardView />
       <RecentInvestmentList />
-      <KycInform
-        isVisible={!kyc_status && showKyc}
-        onAccept={() => {
-          navigation.navigate('KYC Form');
-          indicatorDispatch(handleHideKycIndicator());
-        }}
-      />
+      <KycInform />
     </SafeAreaView>
   );
 }

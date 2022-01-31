@@ -22,7 +22,7 @@ export default function ProfileStack(params) {
     >
       <Screen name={'Profile_'} component={Profile} />
       <Screen name={'Edit Profile'} component={EditProfile} />
-      <Screen name={'KYC Form'} component={KycForm} />
+      <Screen name={'KYC'} component={KycForm} />
       <Screen name={'Change Password'} component={ChangePassword} />
     </Navigator>
   );

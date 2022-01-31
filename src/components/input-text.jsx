@@ -17,6 +17,7 @@ const InputText = forwardRef((props, ref) => {
       {props.error && <Text style={styles.error}>{props.error}</Text>}
       <View style={[styles.textInputWrapper, props.contentStyles]}>
         {props.type === 'money' && <Text style={styles.naira}>₦</Text>}
+        {props.type === 'bvn' && <Text style={styles.naira}>BVN</Text>}
         {props.type === 'email' && (
           <FontAwesome
             name={'envelope-o'}

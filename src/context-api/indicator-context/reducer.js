@@ -2,10 +2,11 @@ import { indicatorActionTypes } from './action-types';
 
 export const indicatorInitialState = {
   status: null,
-  isVisible: true,
+  isVisible: false,
   title: null,
   message: null,
   showKyc: null,
+  kycMessage: null,
 };
 
 export const indicatorReducer = (state = indicatorInitialState, { type, payload }) => {
@@ -20,7 +21,7 @@ export const indicatorReducer = (state = indicatorInitialState, { type, payload 
       return { ...state, ...payload };
 
     case indicatorActionTypes.ShowKyc:
-      return { ...state, showKyc: true };
+      return { ...state, showKyc: true, kycMessage: payload?.message };
 
     case indicatorActionTypes.HideKyc:
       return { ...state, showKyc: false };

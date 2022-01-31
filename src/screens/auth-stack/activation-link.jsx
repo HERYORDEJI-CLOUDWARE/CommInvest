@@ -30,10 +30,6 @@ import StackNavbar from '../../components/stack-navbar';
 export default function ActivationLink() {
   const navigation = useNavigation();
   const { state: indicatorState, dispatch: indicatorDispatch } = useContext(IndicatorContext);
-  const { state: rootState, dispatch: rootDispatch } = useContext(RootContext);
-  const {
-    user_details: { user_id, account_name, account_no, user_firstname },
-  } = rootState;
 
   // console.log('indicatorState', indicatorState);
 
@@ -83,6 +79,7 @@ export default function ActivationLink() {
                 onBlur={onBlur}
                 value={value}
                 error={errors?.email?.message}
+                keyboardType={'email-address'}
               />
             )}
             rules={{

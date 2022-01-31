@@ -1,5 +1,7 @@
-import { axiosInstance } from '../utils/axios-config';
+import { axiosController, axiosInstance } from '../utils/axios-config';
 import { userBaseURL, kycBaseURL, fetchBaseURL } from '../utils/constants';
+import { IndicatorContext } from '../context-api/indicator-context';
+import { handleErrorIndicator } from '../context-api/indicator-context/handlers';
 
 // register user
 export const registerRequest = async ({ first_name, last_name, bvn, phone, email, password }) => {
@@ -25,7 +27,34 @@ export const loginRequest = async ({ email, password }) => {
     const data = new FormData();
     data.append('username', email);
     data.append('password', password);
-    const res = await axiosInstance.post(userBaseURL + 'login', data, { timeout: 5000 });
+    let res = await axiosInstance.post(userBaseURL + 'login', data, { timeout: 5000 });
+    return res.data;
+  } catch (err) {
+    console.log('\n\n', JSON.stringify(err));
+    const { data } = err.response;
+    return data;
+  }
+};
+
+// fetch user details === DONE
+export const fetchUserRequest = async ({ user_id }) => {
+  try {
+    const res = await axiosInstance.get(fetchBaseURL + `user?user_id=${user_id}`, {
+      timeout: 5000,
+    });
+    return res.data;
+  } catch (err) {
+    const { data } = err.response;
+    return data;
+  }
+};
+
+// fetch user Kyc === DONE
+export const fetchKycRequest = async ({ user_id }) => {
+  try {
+    const res = await axiosInstance.get(fetchBaseURL + `kyc?user_id=${user_id}`, {
+      timeout: 5000,
+    });
     return res.data;
   } catch (err) {
     const { data } = err.response;
@@ -148,19 +177,6 @@ export const registerKycRequest = async ({
       name: upload_card.fileName,
     });
     const res = await axiosInstance.post(kycBaseURL + 'register_kyc', data, { timeout: 5000 });
-    return res.data;
-  } catch (err) {
-    const { data } = err.response;
-    return data;
-  }
-};
-
-// fetch user details === DONE
-export const fetchUserRequest = async ({ user_id }) => {
-  try {
-    const res = await axiosInstance.get(fetchBaseURL + `user?user_id=${user_id}`, {
-      timeout: 5000,
-    });
     return res.data;
   } catch (err) {
     const { data } = err.response;

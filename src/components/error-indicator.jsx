@@ -81,11 +81,7 @@ export default function ErrorIndicator(props) {
       <View style={styles.content}>
         <View style={styles.wrapper}>
           {<Text style={[styles.title, { color: 'red' }]}>{indicatorState.title}</Text>}
-          {indicatorState.message && (
-            <Text style={styles.message} numberOfLines={4}>
-              {indicatorState.message}
-            </Text>
-          )}
+          {indicatorState.message && <Text style={styles.message}>{indicatorState.message}</Text>}
         </View>
       </View>
     </Modal>
